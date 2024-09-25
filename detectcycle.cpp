@@ -1,5 +1,9 @@
-#include <iostream>
+//STT: 22520639
+//Full Name: Ngô Hoàng Phương Khanh
+//Session 04 - Part 1 - Exercise 02
+//Notes or Remarks:
 
+#include <iostream>
 using namespace std;
 
 struct Node
