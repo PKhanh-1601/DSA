@@ -1,3 +1,8 @@
+//STT: 22520639
+//Full Name: Ngô Hoàng Phương Khanh
+//Session 04 - Part 1 - Exercise 01
+//Notes or Remarks:
+
 #include<bits/stdc++.h>
 using namespace std;
 
