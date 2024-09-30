@@ -1,6 +1,6 @@
 //STT: 22520639
 //Full Name: Ngô Hoàng Phương Khanh
-//Session 04 - Part 1 - Exercise 0
+//Session 04 - Part 1 - Exercise 08
 //Notes or Remarks:
 
 #include <iostream>
