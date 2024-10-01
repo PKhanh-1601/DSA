@@ -6,126 +6,131 @@
 #include <iostream>
 using namespace std;
 
-struct ListNode
-{
-    int val;
-    ListNode* next;
-    ListNode(int x) : val(x), next(NULL) {}
+struct node {
+    int data;
+    node *link;
 };
 
-int getLength(ListNode* head)
-{
-    int length = 0;
-    while (head != NULL)
-    {
-        length++;
-        head = head->next;
-    }
-    return length;
-}
+struct List {
+    node *phead = NULL;
+    node *ptail = NULL;
 
-ListNode* getIntersectionNode(ListNode* headA, ListNode* headB)
-{
-    int lenA = getLength(headA);
-    int lenB = getLength(headB);
-    while (lenA > lenB)
+    void insertList(int data)
     {
-        headA = headA->next;
-        lenA--;
-    }
-    while (lenB > lenA)
-    {
-        headB = headB->next;
-        lenB--;
-    }
-    while (headA != NULL && headB != NULL)
-    {
-        if (headA == headB)
+        if (phead == NULL)
         {
-            return headA;
+            node *tmp = new node();
+            tmp->data = data;
+            tmp->link = NULL;
+            phead = tmp;
+            ptail = tmp;
         }
-        headA = headA->next;
-        headB = headB->next;
-    }
-    return NULL;
-}
-
-ListNode* appendNode(ListNode*& head, int data)
-{
-    ListNode* newNode = new ListNode(data);
-    if (head == NULL)
-    {
-        head = newNode;
-    }
-    else
-    {
-        ListNode* temp = head;
-        while (temp->next != NULL)
+        else
         {
-            temp = temp->next;
+            node *temp = new node();
+            temp->data = data;
+            temp->link = NULL;
+            ptail->link = temp;
+            ptail = temp;
         }
-        temp->next = newNode;
     }
-    return newNode;
-}
 
-void printList(ListNode* head)
-{
-    while (head != NULL)
+    void print()
     {
-        cout << head->val << " ";
-        head = head->next;
+        node *tmp = phead;
+        if (tmp == NULL)
+        {
+            cout << "Danh sach rong." << endl;
+            return;
+        }
+        cout << "Danh sach: ";
+        while (tmp != NULL)
+        {
+            cout << tmp->data << " ";
+            tmp = tmp->link;
+        }
+        cout << endl;
     }
-    cout << endl;
-}
 
-int main()
-{
-    ListNode* headA = NULL;
-    ListNode* headB = NULL;
-    int n1, n2, x;
-    cout << "Nhap so luong phan tư cua linked list A: ";
+    int length()
+    {
+        int len = 0;
+        node *current = phead;
+        while (current != NULL) {
+            len++;
+            current = current->link;
+        }
+        return len;
+    }
+
+    node* findIntersection(List& other)
+    {
+        int len1 = this->length();
+        int len2 = other.length();
+
+        node* ptr1 = this->phead;
+        node* ptr2 = other.phead;
+
+        if (len1 > len2)
+        {
+            for (int i = 0; i < len1 - len2; i++)
+            {
+                ptr1 = ptr1->link;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < len2 - len1; i++)
+            {
+                ptr2 = ptr2->link;
+            }
+        }
+
+        while (ptr1 != NULL && ptr2 != NULL)
+        {
+            if (ptr1 == ptr2)
+            {
+                return ptr1;
+            }
+            ptr1 = ptr1->link;
+            ptr2 = ptr2->link;
+        }
+
+        return NULL;
+    }
+};
+
+int main() {
+    List l1, l2;
+
+    // Input for the first linked list
+    int n1;
+    cout << "Nhap so phan tu cho danh sach 1: ";
     cin >> n1;
-    cout << "Nhap cac phan tư linked list A: ";
-    for (int i = 0; i < n1; i++)
-    {
+    cout << "Nhap gia tri cho danh sach 1: ";
+    for (int i = 0; i < n1; i++) {
+        int x;
         cin >> x;
-        appendNode(headA, x);
+        l1.insertList(x);
     }
-    cout << "Nhap so luong phan tư cua linked list B: ";
-    cin >> n2;
-    cout << "Nhap cac phan tu linked list B: ";
-    for (int i = 0; i < n2; i++)
-    {
-        cin >> x;
-        appendNode(headB, x);
-    }
-    int intersectionVal;
-    cout << "Nhap gia tri Node ma hai danh sach giao nhau (trong linked list A): ";
-    cin >> intersectionVal;
-    ListNode* temp = headA;
-    while (temp != NULL && temp->val != intersectionVal)
-    {
-        temp = temp->next;
-    }
-    if (temp != NULL)
-    {
-        ListNode* tailB = headB;
-        while (tailB->next != NULL)
-        {
-            tailB = tailB->next;
-        }
-        tailB->next = temp;
-    }
-    ListNode* intersectionNode = getIntersectionNode(headA, headB);
 
-    if (intersectionNode != NULL)
-    {
-        cout << "Giao diem tai Node co gia tri: " << intersectionNode->val << endl;
+    // Input for the second linked list
+    int n2;
+    cout << "Nhap so phan tu cho danh sach 2: ";
+    cin >> n2;
+    cout << "Nhap gia tri cho danh sach 2: ";
+    for (int i = 0; i < n2; i++) {
+        int x;
+        cin >> x;
+        l2.insertList(x);
     }
-    else
-    {
-        cout << "Khong co giao diem." << endl;
+
+    node* intersection = l1.findIntersection(l2);
+
+    if (intersection != NULL) {
+        cout << "Diem giao nhau: " << intersection->data << endl;
+    } else {
+        cout << "Khong co giao nhau." << endl;
     }
 
     return 0;
