@@ -3,38 +3,55 @@
 //Session 04 - Part 1 - Exercise 06
 //Notes or Remarks:
 
-#include <bits/stdc++.h>
+#include <iostream>
 using namespace std;
 
 struct ListNode
 {
     int val;
-    ListNode* next;
+    ListNode *next;
     ListNode(int x) : val(x), next(NULL) {}
 };
 
-ListNode* appendNode(ListNode*& head, int data)
+void insertAtEnd(ListNode*& head, int value)
 {
-    ListNode* newNode = new ListNode(data);
-    if (head == NULL)
+    ListNode* newNode = new ListNode(value);
+    if (!head)
     {
         head = newNode;
     }
     else
     {
         ListNode* temp = head;
-        while (temp->next != NULL)
+        while (temp->next)
         {
             temp = temp->next;
         }
         temp->next = newNode;
     }
-    return newNode;
+}
+
+void eliminateDuplicates(ListNode* head)
+{
+    ListNode* current = head;
+    while (current && current->next)
+    {
+        if (current->val == current->next->val)
+        {
+            ListNode* duplicate = current->next;
+            current->next = current->next->next;
+            delete duplicate;
+        }
+    else
+        {
+            current = current->next;
+        }
+    }
 }
 
 void printList(ListNode* head)
 {
-    while (head != NULL)
+    while (head)
     {
         cout << head->val << " ";
         head = head->next;
@@ -42,42 +59,28 @@ void printList(ListNode* head)
     cout << endl;
 }
 
-ListNode* eliminateDuplicates(ListNode* head)
-{
-    if (head == NULL) return head;
-    ListNode* current = head;
-    while (current != NULL && current->next != NULL)
-    {
-        if (current->val == current->next->val)
-        {
-            ListNode* temp = current->next;
-            current->next = current->next->next;
-            delete temp;
-        }
-    else
-        {
-            current = current->next;
-        }
-    }
-    return head;
-}
 
 int main()
 {
     ListNode* head = NULL;
-    int n, x;
-    cout << "Nhap so luong phan tu cua linked list: ";
+    int n;
+
+    cout << "Nhap so luong phan tu cua danh sach lien ket (da sap xep): ";
     cin >> n;
-    cout << "Nhap cac phan tu cua linked list (da sap xep): ";
-    for (int i = 0; i < n; i++)
+
+    cout << "Nhap cac phan tu cua danh sach (theo thu tu tang dan):\n";
+    for (int i = 0; i < n; ++i)
     {
-        cin >> x;
-        appendNode(head, x);
+        int value;
+        cout << "Phan tu " << i + 1 << ": ";
+        cin >> value;
+        insertAtEnd(head, value);
     }
-    cout << "Danh sach ban dau: ";
+
+    eliminateDuplicates(head);
+
+    cout << "Danh sach sau khi loai bo cac phan tu trung lap:\n";
     printList(head);
-    head = eliminateDuplicates(head);
-    cout << "Danh sach sau khi loai bo cac phan tu trung lap: ";
-    printList(head);
+
     return 0;
 }
